@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.1.0'
+    }
+}
+
+
+
+plugins {
+    // Ломбок - лучшее что происходило с жабой
+    id 'io.franzbecker.gradle-lombok' version '1.11'
+    id 'java'
+    // Эта штука позволяет проверить на апдейты зависимости
+    // Для этого выполняется gradle dependencyUpdates
+    // Подробнее https://github.com/ben-manes/gradle-versions-plugin
+    id 'com.github.ben-manes.versions' version '0.17.0'
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+// Для работы с JUnit 5. Для 4го можно по-другому
+apply plugin: 'org.junit.platform.gradle.plugin'
+// Годная штука для статической проверки кода
+apply plugin: 'checkstyle'
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+sourceCompatibility = JavaVersion.VERSION_1_9
+targetCompatibility = JavaVersion.VERSION_1_9
+
+mainClassName = "LoggerFeatures"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // JUnit 5 зависимости именно таким образом
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.1.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.1.0")
+    // Аннотации @Nullable и @NotNull и некоторые другие. IDEA позволяет проверять так аннотированные поля и аргументы.
+    compile('org.jetbrains:annotations:15.0')
+    // Зависимости Log4j2 - первые 2 для обычного, fusesource для цветного лога в windows
+    compile('org.apache.logging.log4j:log4j-api:2.10.0')
+    compile('org.apache.logging.log4j:log4j-core:2.10.0')
+    compile('org.fusesource.jansi:jansi:1.17')
+    // trove4j - две полезные фишки: Hash-коллекции с кастомным hashCode/equals и коллекции над примитивами
+    compile ('net.sf.trove4j:trove4j:3.0.3')
+    // Как начинать проект без гуавы?
+    compile('com.google.guava:guava:24.0-jre')
+    // Кэширование - практически неотъемлимая часть сколько-нибудь сложного приложения.
+    // Библиотечка достаточно проста, можно почитать https://github.com/ben-manes/caffeine/wiki
+    compile ('com.github.ben-manes.caffeine:caffeine:2.6.1')
+    // vavr представляет собой ряд классных функциональных фич
+    // есть еще jool, который очень похож на этот
+    compile('io.vavr:vavr:0.9.2')
+    // TBD:
+    // cactus
+    // jOOλ
+    // rxjava
+
+}
+
+lombok {
+    version = "1.16.20"
+    sha256 = ""
+}
+
+// Плагин для проверки стилистики кода
+// Запускается gradle checkstyleMain
+checkstyle {
+    configFile = rootProject.file('src/main/resources/checkstyle.xml')
+    toolVersion ="8.8"
+}

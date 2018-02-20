@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <CustomLevels>
+         <!--А так определяется кастомный level для логгера-->
+        <CustomLevel name="DATAB" intLevel="350"/>
+        <CustomLevel name="SEPAR" intLevel="400"/>
+    </CustomLevels>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %highlight{%-40c{.} %-5level - }{FATAL=bg_red, ERROR=red, WARN=magenta, INFO=green, DEBUG=blue, DATAB=cyan, SEPAR=bright yellow} %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <!--Таким образом обрабатываются объекты, которые логируются по-особому-->
+        <!--Если убрать additivity="false", то рутовый логгер прогонится вместе с этим для указанного класса-->
+        <Logger name="log4j.model.NoDebugObject" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <!--Тест вложенности-->
+        <Logger name="log4j.some" level="error" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="log4j.some.pack" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>
