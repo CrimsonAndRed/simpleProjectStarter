@@ -32,7 +32,7 @@ compileTestJava.options.encoding = "UTF-8"
 sourceCompatibility = JavaVersion.VERSION_1_9
 targetCompatibility = JavaVersion.VERSION_1_9
 
-mainClassName = "my.little.Application"
+mainClassName = "LoggerFeatures"
 
 repositories {
     mavenCentral()
